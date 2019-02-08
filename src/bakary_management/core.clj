@@ -99,8 +99,35 @@
    ) 
   )
   
+(defn product-type-price-list [product-code inventory]
+  (->>
+   (filter (fn [product] (= (:code product) product-code)) inventory)
+   (reduce #())
+   (:pack-types)
+   )
+  )
+
+(defn price-for-each-product-type [product-type pack-type-price-list]
+  (->>
+   (filter (fn [{pack-type :pack-type price :price }] (= pack-type product-type)) pack-type-price-list)
+   (into {})
+   (:price)
+   )
+  )
+
+(defn calculate-price-for-items [pack-type-price-list can-product-brekdown-equally-result]
+  (map 
+   (fn [{pack-type :pack-type num-of-packs :num-of-packs}] {:pack-type pack-type
+                                                            :num-of-packs num-of-packs
+                                                            :total-price (* num-of-packs (price-for-each-product-type pack-type pack-type-price-list))
+                                                            } ) 
+   can-product-brekdown-equally-result)
+  
+  )
+
 ;;;; Inpure functions 
 
+(declare start)
 (defn user-input
   "User input from command line"
   ([] (user-input ""))
@@ -133,12 +160,31 @@
   
   )
 
+(defn print-result-on-screen [pack-type-total-price-result inventory]
+  (println "*********************************")
+  (doseq [{pack-type :pack-type  num-of-packs :num-of-packs total-price :total-price } pack-type-total-price-result]
+    (println pack-type, "*", num-of-packs , "=", total-price)
+    )
+  (start inventory)
+  )
+
+(defn price-for-products 
+  [product-code can-product-brekdown-equally-result inventory]
+  (let [pack-type-price-list (product-type-price-list product-code inventory)
+        pack-type-total-price-result (calculate-price-for-items pack-type-price-list can-product-brekdown-equally-result)
+        ]
+    (print-result-on-screen pack-type-total-price-result inventory) 
+    )
+  )
+
 ;;; 
 ;;; Get packet types from product-code
 ;;; Sorted those packet types
 ;;; Check product can be break down equally 
 ;;; if yes then calculate its cost
 ;;; Check other combinations
+
+
 
 (defn process-command 
   [inventory num-of-items product-code]
@@ -157,7 +203,7 @@
               can-product-brekdown-equally-result (can-product-breakdown-equally num-of-items pack-types)
               ]
           (if (vector? can-product-brekdown-equally-result)
-            (println "x is", can-product-brekdown-equally-result)
+            (price-for-products product-code can-product-brekdown-equally-result inventory)
             (recur (next permutation) )
             )
           )
@@ -179,6 +225,7 @@
       (process-command inventory  num-of-items product-code)
       )
     ))
+
 
 (defn -main
   [& args]
