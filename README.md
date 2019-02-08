@@ -5,34 +5,19 @@ Baery management tool
 ## Installation
 
 Make sure you have installed lein and java 
+
 Lein can be found on https://leiningen.org/
+
 Then go to root project dir
+
 lein run 
+
 This will start the program
+
 lein test for unit tests
 
 
-## Usage
 
-FIXME: explanation
-
-    $ java -jar bakary-management-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
 
 ## License
 
