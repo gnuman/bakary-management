@@ -1,10 +1,16 @@
 # bakary-management
 
-FIXME: description
+Baery management tool
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Make sure you have installed lein and java 
+Lein can be found on https://leiningen.org/
+Then go to root project dir
+lein run 
+This will start the program
+lein test for unit tests
+
 
 ## Usage
 
