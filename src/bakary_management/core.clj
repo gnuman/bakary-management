@@ -210,6 +210,7 @@
         ))
    )
   (println "Unfortunetly we can't process your request at this point of time")
+  (start inventory)
   )
 
 (defn start
