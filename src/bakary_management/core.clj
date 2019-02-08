@@ -40,7 +40,10 @@
                  }])
 
 
-
+;;; Recursive function that checks if you can divide packets into parts
+;;; Its takes number of items and pack types vector
+;;; e.g to check 13 CF, get pack types associated with CF those are 9 5 3
+;;; call this function with 13 [ 9 5 3] if it can devide that equally then it returns vector ortheswise map
 (defn can-product-breakdown-equally 
   ([num-of-items pack-types]
    (can-product-breakdown-equally  num-of-items pack-types []))
@@ -119,6 +122,7 @@
   (map 
    (fn [{pack-type :pack-type num-of-packs :num-of-packs}] {:pack-type pack-type
                                                             :num-of-packs num-of-packs
+                                                            :individual-price (price-for-each-product-type pack-type pack-type-price-list)
                                                             :total-price (* num-of-packs (price-for-each-product-type pack-type pack-type-price-list))
                                                             } ) 
    can-product-brekdown-equally-result)
@@ -155,15 +159,11 @@
     [(convert-str-to-int num-of-items) (check-product-in-inventory product-code inventory)]
     ))
 
-(defn check-if-can-product-breakdown
-  [num-of-items sorted-product-type-permutations]
-  
-  )
 
 (defn print-result-on-screen [pack-type-total-price-result inventory]
   (println "*********************************")
-  (doseq [{pack-type :pack-type  num-of-packs :num-of-packs total-price :total-price } pack-type-total-price-result]
-    (println pack-type, "*", num-of-packs , "=", total-price)
+  (doseq [{pack-type :pack-type  num-of-packs :num-of-packs total-price :total-price individual-price :individual-price } pack-type-total-price-result]
+    (println num-of-packs,  "*",  pack-type, "(", individual-price, "$)", "=", total-price)
     )
   (start inventory)
   )
@@ -178,12 +178,12 @@
   )
 
 ;;; 
-;;; Get packet types from product-code
-;;; Sorted those packet types
-;;; Check product can be break down equally 
-;;; if yes then calculate its cost
-;;; Check other combinations
-
+;;; Algo how this program works
+;;; Get user Input, from which get pack types associated with it
+;;; Calculate permutations of pack types and sort 
+;;; For each pack type see you can breakdown num of items
+;;; When you are able to breakdown items, stop print the result
+;;; Continue to start
 
 
 (defn process-command 
